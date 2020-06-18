@@ -1,8 +1,8 @@
-package vn.edu.ntu.dinhtuyen.controller;
+package vn.edu.ntu.thanhdat.controller;
 
 import java.util.List;
 
-import vn.edu.ntu.dinhtuyen.model.Product;
+import vn.edu.ntu.thanhdat.model.Product;
 
 public interface ICartController {
 
@@ -10,4 +10,5 @@ public interface ICartController {
     public Boolean addToCart(Product product);
     public void clearCart();
     public List<Product> getCart();
+    public void addProduct(Product p );
 }

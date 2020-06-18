@@ -1,4 +1,4 @@
-package vn.edu.ntu.dinhtuyen.navigationapp;
+package vn.edu.ntu.thanhdat.navigationapp;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,8 +14,8 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import java.util.List;
 
-import vn.edu.ntu.dinhtuyen.controller.ICartController;
-import vn.edu.ntu.dinhtuyen.model.Product;
+import vn.edu.ntu.thanhdat.controller.ICartController;
+import vn.edu.ntu.thanhdat.model.Product;
 
 public class CartFragment extends Fragment {
 
@@ -23,11 +23,13 @@ public class CartFragment extends Fragment {
     Button btnOrder, btnDeleteCart;
     NavController controller;
 
+    ICartController cartController;
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
+        cartController =((MainActivity)getActivity()).cartController;
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.cart_product, container, false);
         txtCartInfo = view.findViewById(R.id.txtCartInfo);
@@ -57,10 +59,17 @@ public class CartFragment extends Fragment {
                 controller.navigate(R.id.action_cartFragment_to_confirmFragment);
             }
         });
+        btnDeleteCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cartController.clearCart();
+                txtCartInfo.setText("Bạn đã xóa sảm phẩm");
+            }
+        });
     }
 
     private void viewCartInfo() {
-        ICartController cartController = (ICartController) getActivity().getApplication();
+
         List<Product> listProduct = cartController.getCart();
         StringBuilder builder = new StringBuilder();
         for(Product product: listProduct) {

@@ -1,11 +1,23 @@
-package vn.edu.ntu.dinhtuyen.model;
+package vn.edu.ntu.thanhdat.model;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "Product")
 public class Product {
-
-    private String name, description;
+    @PrimaryKey(autoGenerate = true)
+    long id;
+    @NonNull
+    private String name;
+    @NonNull
+    private   String description;
+    @NonNull
     private int price;
+//-------------------------------------------------------------------------
 
-    public Product(String name, String description, int price) {
+
+    public Product(@NonNull String name, @NonNull String description, int price) {
         this.name = name;
         this.description = description;
         this.price = price;

@@ -1,4 +1,4 @@
-package vn.edu.ntu.dinhtuyen.navigationapp;
+package vn.edu.ntu.thanhdat.navigationapp;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,8 +23,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
-import vn.edu.ntu.dinhtuyen.controller.ICartController;
-import vn.edu.ntu.dinhtuyen.model.Product;
+import vn.edu.ntu.thanhdat.controller.CartControllerBD;
+import vn.edu.ntu.thanhdat.controller.ICartController;
+import vn.edu.ntu.thanhdat.model.Product;
 
 public class ListProductFragment extends Fragment implements View.OnClickListener{
 
@@ -57,6 +57,18 @@ public class ListProductFragment extends Fragment implements View.OnClickListene
             default: return super.onOptionsItemSelected(item);
         }
     }
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        cartController = ((MainActivity)getActivity()).cartController;
+        controller = NavHostFragment.findNavController(ListProductFragment.this);
+        ((MainActivity) getActivity()).controller = controller;
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                controller.navigate(R.id.action_listProductFragment_to_importProductFragment);
+            }
+        });
+    }
 
     @Override
     public View onCreateView(
@@ -68,24 +80,14 @@ public class ListProductFragment extends Fragment implements View.OnClickListene
         rvListProduct = view.findViewById(R.id.rvListProduct);
         fab = view.findViewById(R.id.fab);
         rvListProduct.setLayoutManager(new LinearLayoutManager(getActivity()));
-        cartController = ((ICartController) getActivity().getApplication());
+        cartController = ((MainActivity)getActivity()).cartController;
         listProduct = cartController.getListProduct();
         adapter = new ProductAdapter(listProduct);
         rvListProduct.setAdapter(adapter);
         return view;
     }
 
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        controller = NavHostFragment.findNavController(ListProductFragment.this);
-        ((MainActivity) getActivity()).controller = controller;
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                controller.navigate(R.id.action_listProductFragment_to_importProductFragment);
-            }
-        });
-    }
+
 
     private class ProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -97,8 +99,8 @@ public class ListProductFragment extends Fragment implements View.OnClickListene
             super(itemView);
             txtName = this.itemView.findViewById(R.id.txtName);
             txtPrice = this.itemView.findViewById(R.id.txtPrice);
-            txtDescription = this.itemView.findViewById(R.id.txtDescription);
-            imgAddCart = this.itemView.findViewById(R.id.imgAddCart);
+            txtDescription = this.itemView.findViewById(R.id.txtDesc);
+            imgAddCart = this.itemView.findViewById(R.id.imageBtn);
             imgAddCart.setOnClickListener(this);
         }
 
@@ -106,14 +108,13 @@ public class ListProductFragment extends Fragment implements View.OnClickListene
             txtName.setText(product.getName());
             txtPrice.setText(new Integer(product.getPrice()).toString());
             txtDescription.setText(product.getDescription());
-            imgAddCart.setImageResource(R.drawable.ic_action_add_cart);
+            imgAddCart.setImageResource(R.drawable.ic_action_name);
             this.product = product;
         }
 
         @Override
         public void onClick(View v) {
-            ICartController controller = (ICartController) getActivity().getApplication();
-            if (!controller.addToCart(product)) {
+            if (!cartController.addToCart(product)) {
                 Toast.makeText(getActivity(), "product " + product.getName() + " is added", Toast.LENGTH_SHORT).show();
             }
             else {

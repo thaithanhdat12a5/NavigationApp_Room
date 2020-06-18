@@ -1,9 +1,6 @@
-package vn.edu.ntu.dinhtuyen.navigationapp;
+package vn.edu.ntu.thanhdat.navigationapp;
 
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -13,10 +10,14 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import vn.edu.ntu.thanhdat.controller.CartController;
+import vn.edu.ntu.thanhdat.controller.CartControllerBD;
+import vn.edu.ntu.thanhdat.controller.ICartController;
+
 public class MainActivity extends AppCompatActivity {
 
     NavController controller;
-
+    ICartController cartController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
                 controller.navigateUp();
             }
         });
+        cartController = new CartControllerBD(this);
     }
 
     @Override

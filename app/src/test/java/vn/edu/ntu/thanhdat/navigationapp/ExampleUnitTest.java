@@ -1,4 +1,4 @@
-package vn.edu.ntu.dinhtuyen.navigationapp;
+package vn.edu.ntu.thanhdat.navigationapp;
 
 import org.junit.Test;
 
